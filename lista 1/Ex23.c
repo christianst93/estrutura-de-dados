@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int contaConsoantes(char *str) {
+int contaVogais(char *str) {
     int num = 0;
     for (int i = 0; i < str[i] != '\0'; i++)
     {
-        if (str[i] != 'a' && str[i] != 'e' && str[i] != 'i' && str[i] != 'o' && str[i] != 'u')
+        if (str[i] == 'a' || str[i] == 'e' || str[i] == 'i' || str[i] == 'o' || str[i] == 'u')
         {
             num++;       
         }        
@@ -21,7 +21,7 @@ int main() {
     printf("Digite uma palavra: ");
     scanf("%s", palavra);
 
-    printf("Numero de consoantes: %d", contaConsoantes(palavra));
+    printf("Numero de vogais: %d", contaVogais(palavra));
 
     free(palavra);
 

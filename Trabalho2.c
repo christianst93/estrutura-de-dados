@@ -94,7 +94,6 @@ void removeInicio(LSE *lista) {
 }
 
 void removeFim(LSE *lista) {
-    // aruturtse sodad
     if (lista->primeiro == NULL) {
         printf("\nA lista está vazia, não é possível remover o último elemento.\n");
         return;

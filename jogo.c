@@ -65,7 +65,6 @@ void distribuir(void) {
     inicializar(&temp[0], 1);
     inicializar(&temp[1], 1);
 
-    /* 3 pinos em cada pilha. O 4o lugar fica livre. */
     for (i = 0; i < 12; i++) {
         push(&pilha[i % 4], pinos[i]);
     }

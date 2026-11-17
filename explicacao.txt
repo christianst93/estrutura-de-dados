@@ -1,105 +1,38 @@
 EXPLICACAO DO jogo.c
-Os numeros sao as linhas do codigo.
 
 DADOS
-9 a 13    Constantes: 4 pilhas, capacidade 4, 4 cores, 3 pinos de cada, 12 no total.
-15 a 19   Struct Pilha. itens guarda as letras. topo vale -1 se vazia. cap e o limite.
-21        pilha[4] sao P1, P2, P3 e P4. O vetor comeca em 0, entao P1 e pilha[0].
-22        temp[2] sao Temp1 e Temp2. Cada um cabe 1 pino.
-23        ntemps: 2 facil, 1 medio, 0 dificil.
-24        movimentos: so conta jogada que deu certo.
-25        inicio: horario em que a partida comecou.
-27        CORES: V vermelho, G verde, A azul, M amarelo.
+6 a 9    Pilha: itens guarda as letras, topo vale -1 se vazia, cap e o limite.
+13       pilha[4] = P1, P2, P3 e P4. P1 e a posicao 0.
+14       temp[2] = Temp1 e Temp2. Cada um cabe 1 pino.
+15       ntemps: 2 facil, 1 medio, 0 dificil.
+16       movimentos: so conta jogada valida.
+17       inicio: horario do comeco, para a funcao time.
 
-FUNCOES DA PILHA
-inicializar (29)
-    Poe topo em -1 e grava a capacidade. Pilha principal recebe 4. Temporario recebe 1.
+FUNCOES
+inicializar (19)  Esvazia a pilha e grava a capacidade.
+vazia (24)        Devolve 1 se topo e -1.
+cheia (28)        Devolve 1 se topo + 1 ja chegou em cap.
+push (32)         Sobe o topo e guarda a letra. Se estiver cheia, devolve 0.
+pop (41)          Copia a letra do topo e desce o topo. Se estiver vazia, devolve 0.
 
-vazia (34)
-    Devolve 1 se topo e -1.
+distribuir (50)   Monta 3 pinos de cada cor (V, G, A, M), embaralha com rand
+                  e da PUSH em rodizio. Cada pilha comeca com 3. O 4o lugar fica livre.
 
-cheia (38)
-    Devolve 1 se a quantidade de pinos (topo + 1) ja chegou em cap.
+venceu (74)       Ganha se os temporarios estao vazios e cada pilha tem
+                  exatamente 3 pinos da mesma cor.
 
-push (42)
-    Se estiver cheia, devolve 0 e nao mexe.
-    Senao sobe o topo e grava a letra nessa posicao. Devolve 1.
+mostrar (95)      Desenha de cima para baixo. (letra) e o topo. Ponto e vazio.
+                  Mostra nivel, tempo e movimentos.
 
-pop (51)
-    Se estiver vazia, devolve 0.
-    Senao copia a letra do topo para a variavel do chamador e desce o topo. Devolve 1.
-    POP so tira o topo.
+ler (137)         Le um numero de 1 ate max e devolve o indice (numero - 1).
+                  Devolve -1 se for invalido.
 
-embaralhar (60)
-    Troca as letras de lugar com rand. A posicao inicial fica aleatoria.
+mover (153)       POP na origem e PUSH no destino.
+                  Recusa mesma pilha, origem vazia ou destino cheio.
+                  A checagem e antes do POP, para o pino nao se perder.
 
-distribuir (72)
-    Monta V V V G G G A A A M M M, embaralha e da PUSH em rodizio nas 4 pilhas.
-    Cada pilha comeca com 3 pinos. O 4o lugar fica livre.
-    Temp1 e Temp2 comecam vazios.
-
-venceu (97)
-    Devolve 0 se Temp1 ou Temp2 ainda tem pino.
-    Cada pilha precisa ter exatamente 3 pinos, todos da mesma cor, e as 4 cores diferentes.
-    Se passar em tudo, devolve 1.
-
-segundos (124)
-    time(NULL) menos inicio. E o tempo da partida, em segundos.
-
-nome_nivel (128)
-    2 temporarios = Facil. 1 = Medio. 0 = Dificil.
-
-mostrar_temp (138)
-    Imprime [ vazio ] ou a letra que esta no canto.
-
-mostrar (146)
-    Desenha o tabuleiro de cima para baixo.
-    (letra) e o topo. Letra sem parenteses esta abaixo. Ponto e lugar vazio.
-    Mostra nivel, tempo (minutos e segundos) e movimentos.
-    No dificil avisa que nao ha temporario. No medio mostra so Temp1.
-
-ler_int (210)
-    Le um inteiro com scanf. Se a pessoa digitar texto, avisa e devolve 0.
-
-indice_pilha (225)
-    Converte 1..4 para 0..3. Numero fora disso devolve -1.
-
-indice_temp (233)
-    Converte 1 e 2 para 0 e 1.
-    No medio, Temp2 e recusado.
-
-mover (245)
-    Uma jogada: POP na origem e PUSH no destino. Vale para pilha e para temporario.
-    Recusa se origem e destino forem a mesma, se a origem estiver vazia ou se o destino estiver cheio.
-    A checagem do destino acontece antes do POP, para o pino nao se perder.
-    Devolve 1 so quando os dois comandos acontecem.
-
-jogada_entre_pilhas (271)
-    Opcao 1. Pergunta a pilha do PUSH e a pilha do POP. Chama mover.
-
-jogada_pilha_temp (297)
-    Opcao 2. POP de uma pilha e PUSH no temporario.
-    No dificil recusa, porque ntemps vale 0.
-
-jogada_temp_pilha (328)
-    Opcao 3. POP do temporario e PUSH em uma pilha.
-    No dificil tambem recusa.
-
-escolher_nivel (359)
-    Mostra as regras e grava ntemps: 1 vira 2, 2 vira 1, 3 vira 0.
-    Se a entrada acabar antes da escolha, ntemps fica -1.
-
-mostrar_desempenho (400)
-    Imprime o tempo e os movimentos no fim.
-
-main (408)
-    Chama escolher_nivel. Se ntemps for -1, encerra.
-    srand(time) prepara o rand uma vez.
-    distribuir monta o tabuleiro. Se o sorteio ja nascer ganho, embaralha de novo.
-    Zera movimentos e marca inicio.
-    No laco, mostra o tabuleiro e le a opcao:
-        0 sai
-        1, 2 ou 3 chamam a jogada correspondente
-    Se mudou vale 1, soma um movimento e testa venceu.
-    Vitoria mostra o tabuleiro, parabens, tempo e movimentos, e encerra.
-    Sair no 0 tambem mostra tempo e movimentos, com a mensagem de jogo encerrado.
+main (173)        Nivel 1, 2 ou 3 vira ntemps = 3 - op (2, 1 ou 0).
+                  srand(time) prepara o sorteio. distribuir monta o jogo.
+                  Opcao 1: entre pilhas. Opcao 2: pilha para temporario.
+                  Opcao 3: temporario para pilha. Opcao 0: sai.
+                  Jogada valida soma 1 movimento. Se venceu, mostra o tempo e encerra.

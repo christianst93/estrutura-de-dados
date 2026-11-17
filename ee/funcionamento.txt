@@ -1,0 +1,151 @@
+FUNCIONAMENTO DO CODIGO
+Jogo dos pinos - TADS Estrutura de Dados
+
+Arquivos da pasta
+  jogo.c       regras, pilha, terminal e servidor
+  estilo.css   cores e formato da pagina
+  jogo         programa gerado pelo gcc
+
+Compilar e executar
+  gcc jogo.c -o jogo
+  ./jogo                 abre o jogo no navegador
+  ./jogo terminal        abre o mesmo jogo no terminal
+
+No navegador: http://127.0.0.1:8080
+O programa precisa ser iniciado de dentro desta pasta, para achar o estilo.css.
+
+
+O QUE O JOGO FAZ
+
+Ha 4 pilhas e 12 pinos: V, G, A e M, 3 de cada cor.
+Cada pilha cabe 4 pinos. O quarto lugar comeca vazio.
+So da para tirar o pino do topo e colocar no topo de outro lugar.
+
+Niveis
+  1 Facil    Temp 1 e Temp 2. Cada temporario cabe 1 pino.
+  2 Medio    somente Temp 1.
+  3 Dificil  sem temporario.
+
+Vence quando os temporarios estao vazios e cada pilha tem
+3 pinos da mesma cor, sem repetir a cor em outra pilha.
+
+
+A PILHA
+
+A struct Pilha tem duas coisas:
+  itens[4]   os pinos, da base para o topo
+  topo       indice do ultimo pino. -1 significa pilha vazia.
+
+Funcoes da estrutura
+  inicializar   coloca topo em -1
+  vazia         topo == -1
+  cheia         topo + 1 >= capacidade
+  push          sobe o topo e grava o pino
+  pop           le o topo e desce o indice
+
+A capacidade nao fica dentro da struct.
+A pilha recebe 4 e o temporario recebe 1, no proprio push.
+Assim a mesma struct serve para os dois.
+
+O POP nunca mexe em pino que esteja abaixo do topo.
+Se a origem esta vazia ou o destino esta cheio, o mover
+confere antes do pop. O pino continua onde estava.
+
+
+COMO A PARTIDA COMECA
+
+distribuir monta o vetor VVVGGGAAAMMM, chama embaralhar
+e da push de um pino por vez, repartindo nas 4 pilhas
+com i % 4. Cada pilha fica com 3 pinos.
+
+embaralhar e o embaralhamento de Fisher-Yates:
+da ultima posicao ate a segunda, troca o elemento
+com outro sorteado entre 0 e i.
+
+srand(time(NULL)) roda uma vez, para cada partida
+sair diferente.
+
+Se o sorteio ja nascer resolvido, distribuir repete,
+no maximo 30 vezes.
+
+comecar escolhe quantos temporarios o nivel usa,
+zera movimentos e guarda a hora de inicio.
+
+
+A JOGADA
+
+mover recebe a origem, o destino e a capacidade do destino.
+  mesma pilha  nao move
+  origem vazia nao move
+  destino cheio nao move
+  caso contrario faz pop na origem e push no destino
+
+No navegador, lugar traduz "p1"..."p4" e "t1"..."t2"
+para o endereco da pilha. O formulario manda origem e destino.
+processar le esses campos e chama mover.
+Se mover devolve NULL, a jogada valeu e movimentos aumenta.
+Se devolve um texto, esse texto aparece como aviso.
+
+No terminal, aplicar faz a mesma chamada e imprime o texto.
+jogada so escolhe qual pilha e a origem e qual e o destino.
+As tres opcoes do menu usam a mesma funcao mover.
+
+
+A VITORIA
+
+venceu olha, nesta ordem:
+  1. Temp 1 e Temp 2 estao vazios
+  2. cada pilha tem exatamente 3 pinos
+  3. todos os pinos da pilha sao iguais ao da base
+  4. a cor da base nao apareceu numa pilha anterior
+
+Os dois temporarios sao sempre consultados.
+No medio e no dificil, o que nao e usado permanece vazio.
+
+
+DOIS MODOS, A MESMA REGRA
+
+main olha o argumento.
+  ./jogo terminal   chama terminal()
+  ./jogo            chama servir()
+
+terminal() e o jogo no console: escolher_nivel, mostrar,
+ler a opcao 1, 2, 3 ou 0, jogada, contar e testar venceu.
+
+servir() abre um socket na porta 8080 e fica em um laco
+de accept. Cada navegador que conecta e atendido por atender.
+
+
+A PAGINA
+
+Nao ha JavaScript. O C monta o HTML e o navegador so mostra.
+
+pagina() escreve o HTML num buffer (struct Buf).
+  sem partida  mostra as regras e os tres niveis
+  com partida  mostra nivel, tempo, movimentos,
+               as 4 pilhas, os temporarios e o formulario
+
+O pino do topo recebe a classe "topo".
+O lugar vazio vira um circulo tracejado.
+V, G, A e M continuam escritos dentro do circulo.
+A cor de cada um esta no estilo.css.
+
+O formulario faz POST para /.
+Depois do POST o servidor responde 303 e o navegador
+volta a pedir a pagina com GET. Atualizar a pagina
+nao repete a jogada.
+
+estilo.css e enviado quando o navegador pede /estilo.css.
+definir_css procura o arquivo na pasta atual e, se nao
+achar, na pasta do executavel.
+
+
+O QUE APONTAR NO CODIGO
+
+  Pilha, push e pop          a estrutura de dados
+  distribuir e embaralhar    o inicio da partida
+  mover                      uma jogada inteira
+  venceu                     a regra de fim
+  pagina                     o HTML gerado pelo C
+  estilo.css                 so a aparencia
+  main                       escolhe terminal ou navegador

@@ -1,0 +1,118 @@
+ROTEIRO DE APRESENTACAO
+Jogo dos pinos - TADS Estrutura de Dados
+
+Tempo sugerido: 5 a 7 minutos.
+Deixe o jogo compilado antes de comecar.
+Abra o jogo.c no editor e o navegador ao lado.
+
+Comando, na pasta ee:
+  gcc jogo.c -o jogo
+  ./jogo
+  Navegador: http://127.0.0.1:8080
+
+
+1. O QUE E O JOGO  (cerca de 40 segundos)
+
+"O trabalho e um jogo de pinos coloridos usando pilha.
+Sao 4 pilhas e 12 pinos, 3 de cada cor: V, G, A e M.
+Cada pilha cabe 4. A gente so move o pino do topo.
+Vence quando cada pilha fica com uma unica cor."
+
+Mostre a tela inicial no navegador, com a legenda das cores
+e os tres niveis.
+
+
+2. A ESTRUTURA  (cerca de 1 minuto)
+
+Abra a struct Pilha no jogo.c.
+
+"A pilha e um vetor de caracteres e um indice chamado topo.
+Topo -1 quer dizer vazia. O push sobe o topo e guarda o pino.
+O pop le esse pino e desce o topo. Nao tem como tirar um pino
+do meio."
+
+Aponte push e pop.
+
+"A capacidade nao esta dentro da struct. A pilha recebe 4
+e o temporario recebe 1. Por isso a mesma pilha serve
+para os dois."
+
+
+3. COMO A PARTIDA NASCE  (cerca de 40 segundos)
+
+Aponte distribuir e embaralhar.
+
+"O programa cria 3 pinos de cada cor, embaralha e reparte
+nas 4 pilhas. Cada uma comeca com 3 pinos e um lugar livre.
+O embaralhamento troca cada posicao com outra sorteada
+antes dela. O srand usa o horario, entao cada execucao
+sai diferente."
+
+Clique em Facil. Mostre as quatro colunas, o circulo
+marcado no topo e os dois temporarios vazios.
+
+
+4. A JOGADA  (cerca de 1 minuto)
+
+"Toda jogada e um pop seguido de um push. A funcao mover
+confere antes: origem e destino diferentes, origem com pino
+e destino com espaco. Se o destino esta cheio, o pino nao
+e tirado."
+
+No formulario, deixe POP e PUSH na mesma pilha e clique Mover.
+Mostre a mensagem na tela.
+
+Depois mova o topo da pilha 1 para a pilha 2.
+Mostre que so o pino de cima mudou de coluna e que
+o contador foi para 1 movimento.
+
+"No codigo, o menu nao tem tres movimentos diferentes.
+Ele so escolhe a origem e o destino. Quem move e sempre
+a funcao mover."
+
+
+5. NIVEIS E VITORIA  (cerca de 1 minuto)
+
+Volte em Novo jogo e abra o Dificil.
+
+"No facil existem dois temporarios, no medio um, no dificil
+nenhum. O temporario e uma pilha de capacidade 1."
+
+Aponte venceu.
+
+"Para ganhar, os temporarios precisam estar vazios e cada
+pilha precisa ter 3 pinos iguais. O codigo tambem confere
+se a cor ja foi usada em outra pilha."
+
+
+6. NAVEGADOR E TERMINAL  (cerca de 1 minuto)
+
+"A regra esta no C. A pagina e HTML gerado por esse C.
+O CSS so pinta. Nao tem JavaScript: o formulario envia
+origem e destino, o servidor atualiza as pilhas e devolve
+a pagina nova."
+
+Aponte pagina() e, se der tempo, o arquivo estilo.css
+nas classes .pino.v, .pino.g, .pino.a e .pino.m.
+
+"O mesmo jogo.c tambem roda no terminal, com
+./jogo terminal. La a funcao mostrar desenha as pilhas
+com parenteses no topo. Push, pop, distribuir e venceu
+sao os mesmos."
+
+
+7. FECHO  (cerca de 20 segundos)
+
+"Resumindo: a pilha guarda o vetor e o topo, o push e o pop
+mexem so nesse topo, e uma jogada e tirar de uma pilha
+e colocar em outra. O navegador mostra o estado.
+Quem decide a jogada e o C."
+
+
+SE ALGO DER ERRADO NA HORA
+
+  Porta ocupada: feche o ./jogo anterior e execute de novo.
+  Pagina sem cor: rode ./jogo de dentro da pasta ee,
+  onde esta o estilo.css.
+  Para o modo texto, em outro terminal:
+  ./jogo terminal

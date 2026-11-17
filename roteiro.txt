@@ -1,0 +1,92 @@
+ROTEIRO DE APRESENTACAO
+TADS - Estrutura de Dados
+Prof. Luciano Vargas Goncalves
+Atividade Avaliada 3 - Jogo de pinos
+Christian
+
+Tempo sugerido: 5 a 7 minutos.
+Ordem: falar a regra, mostrar a pilha no codigo, rodar o jogo.
+
+
+1. ABERTURA
+
+"O trabalho e um jogo de pinos coloridos baseado na ideia da Torre de Hanoi,
+mas sem a regra de tamanho. Qualquer cor pode ficar sobre qualquer cor.
+O limite e a capacidade da pilha.
+
+Sao 4 pilhas, P1 a P4, e 12 pinos: 3 vermelhos, 3 verdes, 3 azuis e 3 amarelos.
+Cada pilha cabe 4. O objetivo e deixar cada pilha com uma unica cor.
+O jogador move um pino por vez, sempre pelo topo."
+
+
+2. A ESTRUTURA (jogo.c, linhas 6 a 17)
+
+Mostrar a struct Pilha.
+
+"A pilha tem tres campos.
+itens guarda as letras dos pinos. A posicao 0 e a base.
+topo indica o ultimo pino. Quando vale -1, a pilha esta vazia.
+cap e o maximo que ela aceita.
+
+pilha[4] sao as quatro colunas. pilha[0] e a P1.
+temp[2] sao os cantos Temp1 e Temp2. A dica do enunciado foi trata-los
+como pilha tambem, so que de capacidade 1.
+ntemps guarda o nivel: 2 no facil, 1 no medio e 0 no dificil."
+
+
+3. PUSH E POP (linhas 32 a 48)
+
+"push sobe o topo e grava a letra. Se a pilha esta cheia, ele devolve 0 e nao mexe.
+pop copia a letra do topo e desce o topo. Se esta vazia, devolve 0.
+So da para tirar o topo. E por isso que no desenho o topo aparece entre parenteses."
+
+
+4. COMO A PARTIDA COMECA (linhas 50 a 71 e 184 a 187)
+
+"distribuir cria o vetor com tres V, tres G, tres A e tres M.
+O for troca as posicoes com rand, entao cada partida comeca diferente.
+srand(time) e chamado uma vez no main, antes disso.
+Depois cada pilha recebe capacidade 4 e os temporarios capacidade 1.
+Os 12 pinos entram com push, em rodizio: P1, P2, P3, P4, P1...
+Cada coluna comeca com 3 pinos e um lugar livre."
+
+
+5. A JOGADA (linhas 151 a 169 e o menu no main)
+
+Rodar o programa aqui.
+
+"No terminal o menu pede exatamente as tres trocas do enunciado.
+1: push em uma pilha e pop de outra.
+2: pop de uma pilha e push no temporario.
+3: pop do temporario e push em uma pilha.
+
+As tres opcoes chamam a mesma funcao mover.
+Ela recusa tres casos: origem igual ao destino, origem vazia e destino cheio.
+A checagem do destino e antes do pop. Se eu tirasse o pino primeiro
+e o destino estivesse cheio, o pino se perderia.
+So quando o pop e o push acontecem o contador de movimentos aumenta."
+
+Demonstrar, no nivel facil:
+- uma jogada da opcao 1, mostrando o parenteses mudar de pilha
+- uma jogada da opcao 2, o pino indo para o Temp1
+- uma jogada invalida, por exemplo empurrar em pilha que ja tem 4
+
+
+6. NIVEIS, TEMPO E FIM (linhas 73 a 92 e 234 a 235)
+
+"O nivel 1 usa Temp1 e Temp2. O nivel 2 so o Temp1.
+O nivel 3 nao usa temporario. Se eu escolher a opcao 2 ou 3 nele, o jogo recusa.
+
+O tempo usa time. Guardo o horario no inicio e, na tela, subtraio do horario atual.
+Os minutos sao a divisao por 60. Os segundos sao o resto.
+
+venceu confere duas coisas: os temporarios estao vazios,
+e cada pilha tem exatamente 3 pinos da mesma cor.
+Como so existem 3 pinos de cada cor, as quatro pilhas ficam com cores diferentes.
+A mensagem final mostra o tempo e os movimentos, para comparar o desempenho."
+
+
+7. FECHO
+
+"Resumindo: tudo e pilha. Entrar e push, sair e pop, e so pelo topo.
+As colunas cabem 4, os cantos cabem 1, e o jogo acaba quando cada coluna tem uma cor."
